@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-img= cv2.imread("my_dress.jpg", cv2.IMREAD_GRAYSCALE)
+img= cv2.imread("my_dress.jpg", cv2.IMREAD_GRAYSCALE)#imagen comparativa
 
 cap=cv2.VideoCapture(1)
 
@@ -26,8 +26,6 @@ while True:
         if m.distance < 0.55*n.distance:
             puntos_gd.append(m)
 
-    #img3= cv2.drawMatches(img, kp_image, gris, kp_gris, puntos_gd, gris)
-
     #homolografia
     if len(puntos_gd)>10:
         query_pts=np.float32([kp_image[m.queryIdx].pt for m in puntos_gd]).reshape(-1, 1, 2)
@@ -44,13 +42,10 @@ while True:
         homography = cv2.polylines (frame, [np.int32 (dst) ], True, (255, 0, 0), 3)
 
         cv2.imshow("homalografia", homography)
+        print("libro dectectado")
     else:
         cv2.imshow("homalografia", gris)
 
-
-    #cv2.imshow("imagen", img)
-    #cv2.imshow("Camara", frame)
-    #cv2.imshow("intento", img3)
     key = cv2.waitKey (1)
     if key == 27:
         break
