@@ -3,7 +3,7 @@ import numpy as np
 
 img= cv2.imread("my_dress.jpg", cv2.IMREAD_GRAYSCALE)#imagen comparativa
 
-cap=cv2.VideoCapture(1)
+cap=cv2.VideoCapture(0)
 
 #captura
 surfeo = cv2.SIFT_create()
@@ -23,7 +23,7 @@ while True:
 
     puntos_gd=[]
     for m,n in comparar:
-        if m.distance < 0.55*n.distance:
+        if m.distance < 0.4*n.distance:
             puntos_gd.append(m)
 
     #homolografia
@@ -36,13 +36,17 @@ while True:
         
         # transforma prespectiva
         h, w, c = img.shape
-        pts=np.float32 ([[0, 0], [0, h], [w, h], [w, 0]]) .reshape (-1, 1, 2)
-        dst = cv2.perspectiveTransform(pts, matrix)
+        pts = np.float32([[0, 0], [0, h], [w, h], [w, 0]]).reshape(-1, 1, 2)
 
-        homography = cv2.polylines (frame, [np.int32 (dst) ], True, (255, 0, 0), 3)
+        try:
+            dst = cv2.perspectiveTransform(pts, matrix)
+            homography = cv2.polylines (frame, [np.int32 (dst) ], True, (255, 0, 0), 3)
+            cv2.imshow("homalografia", homography)
+            print("libro dectectado")
+        except cv2.error as e:
+            print(f"Error: {e}")
 
-        cv2.imshow("homalografia", homography)
-        print("libro dectectado")
+        
     else:
         cv2.imshow("homalografia", gris)
 
